@@ -19,4 +19,4 @@ class MediaStore(_internal_store.InternalStore):
         _internal_store.InternalStore.__init__(self, create_key, device_id, connection)
 
     def insert_video(self, file_path: pathlib.Path) -> None:
-        pass
+        raise NotImplementedError("This function is not implemented")

@@ -1,3 +1,4 @@
+import datetime
 import sqlite3
 
 from typing import Dict, Tuple
@@ -29,18 +30,25 @@ class InternalStore:
     def insert(self, table: str, columns: Tuple, values: Tuple) -> None:
         # Generic insert method
         # add device_id and timestamp
-        columns_string = "device_id, "
+        columns_string = "(device_id, "
         column_counter = 1
         for column in columns:
             columns_string += f"{column}, "
             column_counter += 1
-        columns_string += "timestamp"
+        columns_string += "timestamp)"
 
         value_string = "("
         for _ in range(column_counter):
             value_string += "?,"
         value_string += "?)"
-
         sql_insert = f"INSERT INTO {table}{columns_string} VALUES{value_string}"
-        self._cursor.execute(sql_insert, values)
+
+        value_insert = [self._device_id]
+        for value in values:
+            value_insert.append(value)
+        value_insert.append(
+            datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc).isoformat()
+        )
+
+        self._cursor.execute(sql_insert, value_insert)
         self._connection.commit()

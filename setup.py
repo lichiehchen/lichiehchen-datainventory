@@ -24,7 +24,7 @@ setuptools.setup(
         "Intended Audience :: Developers",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3.8"
+        "Programming Language :: Python :: 3.7"
     ],
     keywords="image and video database",
     packages=setuptools.find_packages(exclude=["examples", "tests"]),
@@ -33,5 +33,5 @@ setuptools.setup(
             "cli=datainventory.bin.cli:main"
         ]
     },
-    python_requires=">=3.8"
+    python_requires=">=3.7"
 )
