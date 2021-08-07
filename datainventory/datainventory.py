@@ -1,3 +1,7 @@
+# Copyright © 2021 by IoT Spectator. All rights reserved.
+
+"""The main module of Data Inventory."""
+
 import pathlib
 import shutil
 import sqlite3

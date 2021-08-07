@@ -1,3 +1,7 @@
+# Copyright © 2021 by IoT Spectator. All rights reserved.
+
+"""Store for machine learning models."""
+
 import sqlite3
 
 from datainventory import _internal_store

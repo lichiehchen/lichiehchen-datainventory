@@ -1,3 +1,7 @@
+# Copyright © 2021 by IoT Spectator. All rights reserved.
+
+"""Store for multimedia data such as video, audio, and image."""
+
 import enum
 import pathlib
 import sqlite3
