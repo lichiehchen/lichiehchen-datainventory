@@ -1,3 +1,7 @@
+# Copyright © 2021 by IoT Spectator. All rights reserved.
+
+"""Internal module that defines common class and definitions."""
+
 import datetime
 import sqlite3
 
