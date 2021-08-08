@@ -24,3 +24,7 @@ class MediaStore(_internal_store.InternalStore):
 
     def insert_video(self, file_path: pathlib.Path) -> None:
         raise NotImplementedError("This function is not implemented")
+
+    def get_video(self) -> pathlib.Path:
+        """Retrieve the video."""
+        raise NotImplementedError("This function is not implemented")
