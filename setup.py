@@ -28,10 +28,5 @@ setuptools.setup(
     ],
     keywords="image and video database",
     packages=setuptools.find_packages(exclude=["examples", "tests"]),
-    entry_points={
-        "console_scripts": [
-            "cli=datainventory.bin.cli:main"
-        ]
-    },
     python_requires=">=3.7"
 )
