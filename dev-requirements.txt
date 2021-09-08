@@ -1,5 +1,7 @@
+pandas
 pytest
 sphinx
+SQLAlchemy
 
 # Install the following packages in development mode
 -e .
