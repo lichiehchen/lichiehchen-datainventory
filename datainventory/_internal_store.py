@@ -27,12 +27,12 @@ class InternalStore:
         self, table_name: str, columns: Dict[str, common.ColumnType]
     ) -> None:
 
-        #columns["device_id"] = common.ColumnType.String
-        #columns["timestamp"] = common.ColumnType.DateTime
+        columns["device_id"] = common.ColumnType.String
+        columns["timestamp"] = common.ColumnType.DateTime
 
         table = sqlalchemy.Table(
-            name=table_name,
-            metadata=self._sql_metadata,
+            table_name,
+            self._sql_metadata,
             *(
                 sqlalchemy.Column(column_name, column_type.value)
                 for column_name, column_type in columns.items()
@@ -44,11 +44,7 @@ class InternalStore:
 
         for item in values:
             item["device_id"] = self._device_id
-            item["timestamp"] = (
-                datetime.datetime.utcnow()
-                .replace(tzinfo=datetime.timezone.utc)
-                .isoformat()
-            )
+            item["timestamp"] = datetime.datetime.utcnow()
 
         table = self._sql_metadata.tables[table_name]
         self._connection.execute(table.insert().values(values))
