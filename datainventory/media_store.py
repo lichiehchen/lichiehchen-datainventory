@@ -4,9 +4,12 @@
 
 import enum
 import pathlib
-import sqlite3
+import sqlalchemy
+
+from sqlalchemy.orm import Session
 
 from datainventory import _internal_store
+from datainventory import common
 
 
 class MediaType(enum.Enum):
@@ -15,12 +18,16 @@ class MediaType(enum.Enum):
     Video = enum.auto()
 
 
-class MediaStore(_internal_store.InternalStore):
+class Video(common.Base):
+    __tablename__ = "video"
 
-    def __init__(
-        self, create_key, device_id: str, connection: sqlite3.Connection
-    ) -> None:
-        _internal_store.InternalStore.__init__(self, create_key, device_id, connection)
+    filename = sqlalchemy.Column(sqlalchemy.String, primary_key=True)
+    location = sqlalchemy.Column(sqlalchemy.String)
+
+
+class MediaStore(_internal_store.InternalStore):
+    def __init__(self, create_key, device_id: str, session: Session) -> None:
+        _internal_store.InternalStore.__init__(self, create_key, device_id)
 
     def insert_video(self, file_path: pathlib.Path) -> None:
         raise NotImplementedError("This function is not implemented")

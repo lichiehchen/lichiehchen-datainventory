@@ -2,48 +2,56 @@
 
 """Store for structured data."""
 
-import enum
+import datetime
 import sqlalchemy
-import sqlite3
 
 import pandas as pd
 
-from typing import Dict, Tuple
+from typing import Dict, List
 
 from datainventory import _internal_store
 from datainventory import common
 
 
 class TableStore(_internal_store.InternalStore):
-
     def __init__(
-        self, create_key, device_id: str, connection: sqlite3.Connection
+        self,
+        create_key,
+        device_id: str,
+        metadata: sqlalchemy.MetaData,
+        connection: sqlalchemy.engine.Connection,
     ) -> None:
-        _internal_store.InternalStore.__init__(self, create_key, device_id, connection)
-
-    def add_table(self, table: str, columns: Dict[str, common.ColumnType]) -> None:
-
-        column_definition = dict()
-        for column, column_type in columns.items():
-            column_definition[column] = column_type.value
-        _internal_store.InternalStore.create_table(
-            self, table=table, columns=column_definition
+        _internal_store.InternalStore.__init__(
+            self, create_key=create_key, device_id=device_id
         )
+        self._connection = connection
+        self._metadata = metadata
 
-    def insert_data(self, table: str, data: Dict) -> None:
+    def create_table(
+        self, table_name: str, columns: Dict[str, common.ColumnType]
+    ) -> None:
 
-        columns = list()
-        values = list()
-        for column, value in data.items():
-            columns.append(column)
-            values.append(value)
+        columns["device_id"] = common.ColumnType.String
+        columns["timestamp"] = common.ColumnType.DateTime
 
-        try:
-            _internal_store.InternalStore.insert(
-                self, table=table, columns=tuple(columns), values=tuple(values)
-            )
-        except sqlite3.OperationalError as error:
-            print(error)
+        table = sqlalchemy.Table(
+            table_name,
+            self._metadata,
+            *(
+                sqlalchemy.Column(column_name, column_type.value)
+                for column_name, column_type in columns.items()
+            ),
+        )
+        table.create(checkfirst=True)
+
+    def insert(self, table_name: str, values: List[Dict]) -> None:
+
+        for item in values:
+            item["device_id"] = self._device_id
+            item["timestamp"] = datetime.datetime.utcnow()
+
+        table = self._metadata.tables[table_name]
+        self._connection.execute(table.insert().values(values))
 
     def query_data(self, table: str, range: common.Range) -> pd.DataFrame:
         pass
