@@ -35,7 +35,6 @@ class TableStore(_internal_store.InternalStore):
         self, table_name: str, columns: Dict[str, common.ColumnType]
     ) -> None:
         """Create a table."""
-
         columns["device_id"] = common.ColumnType.String
         columns["timestamp"] = common.ColumnType.DateTime
 
