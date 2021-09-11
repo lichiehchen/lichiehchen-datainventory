@@ -1,4 +1,9 @@
+black
+flake8
+mypy
+pydocstyle
 pytest
+pytest-cov
 sphinx
 
 # Install all the dependencies of the release version
