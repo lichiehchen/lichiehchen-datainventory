@@ -2,17 +2,27 @@ import datetime
 import enum
 import sqlalchemy
 
-from typing import NewType, Tuple, Union
+from typing import Optional
 
 from sqlalchemy.ext import declarative
 
-Start = NewType("Start", datetime.datetime)
-End = NewType("End", datetime.datetime)
-Interval = NewType("Interval", datetime.timedelta)
-
-Range = Union[None, Tuple[Start, Interval], Tuple[Start, End]]
-
 Base = declarative.declarative_base()
+
+
+class Range:
+    def __init__(
+        self,
+        start: datetime.datetime,
+        end: Optional[datetime.datetime] = None,
+        interval: Optional[datetime.timedelta] = None,
+    ) -> None:
+        self._start = start
+        self._end = end
+        if interval:
+            self._end = self._start + interval
+
+    def get_range(self):
+        return self._start, self._end
 
 
 class ColumnType(enum.Enum):

@@ -101,10 +101,15 @@ mystore.insert(
 )
 """
 
+from datetime import date
+from datetime import datetime
+from datetime import timedelta
 
+from datainventory import common
 from datainventory import table_store
 
 from sqlalchemy.orm import sessionmaker
+
 
 def test_simple_case():
     engine = sqlalchemy.create_engine(
@@ -122,10 +127,19 @@ def test_simple_case():
     schema = {"scale": common.ColumnType.String, "value": common.ColumnType.Float}
     store.create_table(table_name="temperature", columns=schema)
 
+    print("########################################")
+    print(type(store.query_data("temperature")))
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    return 0
     data = [{"scale": "F", "value": 97.9}, {"scale": "C", "value": 23.7}]
     store.insert(table_name="temperature", values=data)
-    output = store.query_data("temperature", None)
+
+    range = common.Range(date(2021, 9, 11), interval=timedelta(days=1))
+
+    output = store.query_data("temperature", range=range)
     print(output)
+
+    print(output["value"].count())
 
 
 if __name__ == "__main__":

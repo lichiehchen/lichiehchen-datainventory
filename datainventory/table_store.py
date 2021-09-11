@@ -7,7 +7,7 @@ import sqlalchemy
 
 import pandas as pd
 
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from sqlalchemy.orm import Session
 
@@ -21,7 +21,7 @@ class TableStore(_internal_store.InternalStore):
         create_key,
         device_id: str,
         metadata: sqlalchemy.MetaData,
-        session: Session
+        session: Session,
     ) -> None:
         _internal_store.InternalStore.__init__(
             self, create_key=create_key, device_id=device_id
@@ -55,11 +55,23 @@ class TableStore(_internal_store.InternalStore):
         table = self._metadata.tables[table_name]
         self._session.execute(table.insert().values(values))
 
-    def query_data(self, table: str, range: common.Range) -> pd.DataFrame:
-        table_obj: sqlalchemy.Table = self._metadata.tables[table]
+    def query_data(  # type: ignore
+        self, table_name: str, range: Optional[common.Range] = None
+    ) -> pd.DataFrame:
+        table: sqlalchemy.Table = self._metadata.tables[table_name]
 
         if range:
-            return pd.DataFrame()
+            start, end = range.get_range()
+            if end:
+                results = (
+                    self._session.query(table)
+                    .filter(table.c.timestamp >= start, table.c.timestamp <= end)
+                    .all()
+                )
+            else:
+                results = (
+                    self._session.query(table).filter(table.c.timestamp >= start).all()
+                )
         else:
-            results = self._session.query(table_obj).all()
-            return pd.DataFrame(results, columns=table_obj.columns.keys())
+            results = self._session.query(table).all()
+        return pd.DataFrame(results, columns=table.columns.keys())

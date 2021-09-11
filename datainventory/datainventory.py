@@ -43,11 +43,12 @@ class DataInventory:
         )
 
     def get_table_store(self) -> table_store.TableStore:
+        Session = sessionmaker(bind=self._engine)
         return table_store.TableStore(
             create_key=_internal_store.CREATE_KEY,
             device_id=self._device_id,
             metadata=self._metadata,
-            connection=self._engine.connect(),
+            session=Session(),
         )
 
     def export(self, dest: pathlib.Path) -> None:
