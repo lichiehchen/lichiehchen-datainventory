@@ -13,6 +13,8 @@ from datainventory import common
 
 
 class Model(common.Base):
+    """The table definition of learning models."""
+
     __tablename__ = "model"
 
     name = sqlalchemy.Column(sqlalchemy.String)
@@ -20,6 +22,7 @@ class Model(common.Base):
 
 
 class ModelStore(_internal_store.InternalStore):
+    """Model Store."""
 
     def __init__(self, create_key, device_id: str, session: Session) -> None:
         _internal_store.InternalStore.__init__(self, create_key, device_id)

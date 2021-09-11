@@ -1,3 +1,7 @@
+# Copyright © 2021 by IoT Spectator. All rights reserved.
+
+"""Common code for Data Inventory."""
+
 import datetime
 import enum
 import sqlalchemy
@@ -10,6 +14,8 @@ Base = declarative.declarative_base()
 
 
 class Range:
+    """Time range for query data."""
+
     def __init__(
         self,
         start: datetime.datetime,
@@ -22,6 +28,7 @@ class Range:
             self._end = self._start + interval
 
     def get_range(self):
+        """Return the start and end timestamp."""
         return self._start, self._end
 
 

@@ -15,6 +15,8 @@ from datainventory import table_store
 
 
 class DataInventory:
+    """Data Inventory."""
+
     def __init__(self, device_id: str, inventory: pathlib.Path) -> None:
         self._device_id = device_id
         self._inventory = inventory
@@ -27,6 +29,7 @@ class DataInventory:
         self._metadata = sqlalchemy.MetaData(bind=self._engine)
 
     def get_media_store(self) -> media_store.MediaStore:
+        """Return an instance of the media store."""
         Session = sessionmaker(bind=self._engine)
         return media_store.MediaStore(
             create_key=_internal_store.CREATE_KEY,
@@ -35,6 +38,7 @@ class DataInventory:
         )
 
     def get_model_store(self) -> model_store.ModelStore:
+        """Return an instance of the model store."""
         Session = sessionmaker(bind=self._engine)
         return model_store.ModelStore(
             create_key=_internal_store.CREATE_KEY,
@@ -43,6 +47,7 @@ class DataInventory:
         )
 
     def get_table_store(self) -> table_store.TableStore:
+        """Return an instance of the table store."""
         Session = sessionmaker(bind=self._engine)
         return table_store.TableStore(
             create_key=_internal_store.CREATE_KEY,
@@ -52,8 +57,10 @@ class DataInventory:
         )
 
     def export(self, dest: pathlib.Path) -> None:
+        """Export the entire data inventory."""
         raise NotImplementedError("Export is not implemented")
 
     def destroy(self) -> None:
+        """Destory the entire data inventory."""
         if self._inventory:
             shutil.rmtree(self._inventory)

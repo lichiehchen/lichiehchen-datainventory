@@ -16,6 +16,8 @@ from datainventory import common
 
 
 class TableStore(_internal_store.InternalStore):
+    """Table Store."""
+
     def __init__(
         self,
         create_key,
@@ -32,6 +34,7 @@ class TableStore(_internal_store.InternalStore):
     def create_table(
         self, table_name: str, columns: Dict[str, common.ColumnType]
     ) -> None:
+        """Create a table."""
 
         columns["device_id"] = common.ColumnType.String
         columns["timestamp"] = common.ColumnType.DateTime
@@ -47,7 +50,7 @@ class TableStore(_internal_store.InternalStore):
         table.create(checkfirst=True)
 
     def insert(self, table_name: str, values: List[Dict]) -> None:
-
+        """Insert data."""
         for item in values:
             item["device_id"] = self._device_id
             item["timestamp"] = datetime.datetime.utcnow()
@@ -58,6 +61,7 @@ class TableStore(_internal_store.InternalStore):
     def query_data(  # type: ignore
         self, table_name: str, range: Optional[common.Range] = None
     ) -> pd.DataFrame:
+        """Query data from a given table within a time range."""
         table: sqlalchemy.Table = self._metadata.tables[table_name]
 
         if range:
