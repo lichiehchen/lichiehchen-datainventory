@@ -9,6 +9,8 @@ import pandas as pd
 
 from typing import Dict, List
 
+from sqlalchemy.orm import Session
+
 from datainventory import _internal_store
 from datainventory import common
 
@@ -19,12 +21,12 @@ class TableStore(_internal_store.InternalStore):
         create_key,
         device_id: str,
         metadata: sqlalchemy.MetaData,
-        connection: sqlalchemy.engine.Connection,
+        session: Session
     ) -> None:
         _internal_store.InternalStore.__init__(
             self, create_key=create_key, device_id=device_id
         )
-        self._connection = connection
+        self._session = session
         self._metadata = metadata
 
     def create_table(
@@ -51,7 +53,13 @@ class TableStore(_internal_store.InternalStore):
             item["timestamp"] = datetime.datetime.utcnow()
 
         table = self._metadata.tables[table_name]
-        self._connection.execute(table.insert().values(values))
+        self._session.execute(table.insert().values(values))
 
     def query_data(self, table: str, range: common.Range) -> pd.DataFrame:
-        pass
+        table_obj: sqlalchemy.Table = self._metadata.tables[table]
+
+        if range:
+            return pd.DataFrame()
+        else:
+            results = self._session.query(table_obj).all()
+            return pd.DataFrame(results, columns=table_obj.columns.keys())

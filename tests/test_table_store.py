@@ -13,6 +13,7 @@ def test_simple_case():
 
     store = table_store.TableStore(
         create_key=_internal_store.CREATE_KEY,
+        device_id="test_device",
         metadata=metadata,
         connection=engine.connect(),
     )

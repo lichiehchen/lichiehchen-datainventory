@@ -82,15 +82,15 @@ dict1 = {
 # for key, value in dict1.items():
 #    print(key, value)
 
-
+"""
 engine = create_engine("sqlite:///abc.db", echo=True)
 meta = MetaData(bind=engine)
 
 mystore = _internal_store.InternalStore(
     create_key=_internal_store.CREATE_KEY,
     device_id="deviceid",
-    sql_metadata=meta,
-    sql_connection=engine.connect(),
+    metadata=meta,
+    connection=engine.connect(),
 )
 
 mystore.create_table("table1", dict1)
@@ -99,3 +99,34 @@ from datetime import datetime
 mystore.insert(
     "table1", [{"time": datetime.now(), "name": "aaa", "device": "mydevice"}]
 )
+"""
+
+
+from datainventory import table_store
+
+from sqlalchemy.orm import sessionmaker
+
+def test_simple_case():
+    engine = sqlalchemy.create_engine(
+        "sqlite+pysqlite:///:memory:", echo=True, future=True
+    )
+    metadata = sqlalchemy.MetaData(bind=engine)
+    Session = sessionmaker(bind=engine)
+    store = table_store.TableStore(
+        create_key=_internal_store.CREATE_KEY,
+        device_id="test_device",
+        metadata=metadata,
+        session=Session()
+    )
+
+    schema = {"scale": common.ColumnType.String, "value": common.ColumnType.Float}
+    store.create_table(table_name="temperature", columns=schema)
+
+    data = [{"scale": "F", "value": 97.9}, {"scale": "C", "value": 23.7}]
+    store.insert(table_name="temperature", values=data)
+    output = store.query_data("temperature", None)
+    print(output)
+
+
+if __name__ == "__main__":
+    test_simple_case()
