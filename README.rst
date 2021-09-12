@@ -1,8 +1,19 @@
 Data Inventory
 ==============
 
-Data Inventory is a database designed for managing machine learning models. It is also suitable for storing images and videos.
+.. image:: https://github.com/iot-spectator/datainventory/actions/workflows/testing.yml/badge.svg
+    :target: https://github.com/iot-spectator/datainventory/actions/workflows/testing.yml
 
+.. image:: https://github.com/iot-spectator/datainventory/actions/workflows/linting.yml/badge.svg
+    :target: https://github.com/iot-spectator/datainventory/actions/workflows/linting.yml
+
+.. image:: https://codecov.io/gh/iot-spectator/iot-health/branch/master/graph/badge.svg?token=NODdpjzGeS
+    :target: https://codecov.io/gh/iot-spectator/iot-health
+
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :target: https://github.com/psf/black
+
+Data Inventory is a database designed for managing machine learning models. It is also suitable for storing images and videos.
 
 
 Requirements
