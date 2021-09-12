@@ -24,9 +24,9 @@ setuptools.setup(
         "Intended Audience :: Developers",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3.7"
+        "Programming Language :: Python :: 3.7",
     ],
     keywords="image and video database",
-    packages=setuptools.find_packages(exclude=["examples", "tests"]),
-    python_requires=">=3.7"
+    packages=setuptools.find_packages(exclude=["diagram", "examples", "tests"]),
+    python_requires=">=3.7",
 )

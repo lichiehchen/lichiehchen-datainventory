@@ -24,7 +24,7 @@ def test_simple_case():
         create_key=_internal_store.CREATE_KEY,
         device_id="test_device",
         metadata=metadata,
-        session=Session()
+        session=Session(),
     )
 
     TABLE = "temperature"
