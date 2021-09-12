@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="RBL7ahtTK5OFCMiRZrs7" name="components">
-        <mxGraphModel dx="1344" dy="636" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="712" dy="358" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -38,7 +38,7 @@
                         </Array>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="4" value="&lt;font color=&quot;#000000&quot;&gt;Simple Store&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffff88;strokeColor=#36393d;" parent="1" vertex="1">
+                <mxCell id="4" value="&lt;font color=&quot;#000000&quot;&gt;Table Store&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffff88;strokeColor=#36393d;" parent="1" vertex="1">
                     <mxGeometry x="440" y="200" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="5" value="&lt;font color=&quot;#000000&quot;&gt;SQLite&lt;/font&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;gradientColor=#7ea6e0;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
@@ -51,7 +51,7 @@
         </mxGraphModel>
     </diagram>
     <diagram id="eNiM2fhLtUcQI9xbktyq" name="directory">
-        <mxGraphModel dx="1344" dy="636" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="712" dy="358" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="2groxXXuJNxLNuPJC8Hw-0"/>
                 <mxCell id="2groxXXuJNxLNuPJC8Hw-1" parent="2groxXXuJNxLNuPJC8Hw-0"/>
