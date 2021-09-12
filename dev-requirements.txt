@@ -5,6 +5,7 @@ pydocstyle
 pytest
 pytest-cov
 sphinx
+sqlalchemy[mypy]
 
 # Install all the dependencies of the release version
 -r requirements.txt
