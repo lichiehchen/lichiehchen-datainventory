@@ -70,7 +70,6 @@ class MediaStore(_internal_store.InternalStore):
         self, file_path: pathlib.Path, media_type: MediaType, copy: bool = True
     ) -> None:
         """Insert a media."""
-
         if copy:
             # Copy the file to location
             pass
