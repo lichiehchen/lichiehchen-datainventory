@@ -34,7 +34,9 @@ class DataInventory:
         return media_store.MediaStore(
             create_key=_internal_store.CREATE_KEY,
             device_id=self._device_id,
+            metadata=self._metadata,
             session=Session(),
+            connection=self._engine.connect(),
         )
 
     def get_model_store(self) -> model_store.ModelStore:

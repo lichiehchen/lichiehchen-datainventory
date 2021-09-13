@@ -14,9 +14,7 @@ from sqlalchemy.orm import sessionmaker
 
 def test_simple_case():
     """Test the basic functionalities of table_store."""
-    engine = sqlalchemy.create_engine(
-        "sqlite+pysqlite:///:memory:", echo=True, future=True
-    )
+    engine = sqlalchemy.create_engine("sqlite:///:memory:", echo=True, future=True)
     metadata = sqlalchemy.MetaData(bind=engine)
 
     Session = sessionmaker(bind=engine)
