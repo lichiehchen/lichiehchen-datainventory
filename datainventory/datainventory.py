@@ -36,7 +36,7 @@ class DataInventory:
             device_id=self._device_id,
             metadata=self._metadata,
             session=Session(),
-            connection=self._engine.connect()
+            connection=self._engine.connect(),
         )
 
     def get_model_store(self) -> model_store.ModelStore:
