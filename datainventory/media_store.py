@@ -59,7 +59,7 @@ class MediaStore(_internal_store.InternalStore):
         metadata: sqlalchemy.MetaData,
         session: Session,
         connection: sqlalchemy.engine.Connection,
-        inventory: pathlib.Path
+        inventory: pathlib.Path,
     ) -> None:
         _internal_store.InternalStore.__init__(
             self, create_key=create_key, device_id=device_id

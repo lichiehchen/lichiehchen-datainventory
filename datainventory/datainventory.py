@@ -37,7 +37,7 @@ class DataInventory:
             metadata=self._metadata,
             session=Session(),
             connection=self._engine.connect(),
-            inventory=self._inventory
+            inventory=self._inventory,
         )
 
     def get_model_store(self) -> model_store.ModelStore:
