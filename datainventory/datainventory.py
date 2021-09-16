@@ -20,7 +20,7 @@ class DataInventory:
     def __init__(self, device_id: str, inventory: pathlib.Path) -> None:
         self._device_id = device_id
         self._inventory = inventory
-        self._database_name = self._inventory.name + ".db"
+        self._database_name = f"{self._inventory.name}.db"
         self._database = self._inventory / self._database_name
 
         if not self._inventory.exists():
@@ -37,6 +37,7 @@ class DataInventory:
             metadata=self._metadata,
             session=Session(),
             connection=self._engine.connect(),
+            inventory=self._inventory,
         )
 
     def get_model_store(self) -> model_store.ModelStore:
