@@ -4,6 +4,7 @@
 
 import enum
 import pathlib
+import shutil
 import sqlalchemy
 
 from datetime import datetime
@@ -58,6 +59,7 @@ class MediaStore(_internal_store.InternalStore):
         metadata: sqlalchemy.MetaData,
         session: Session,
         connection: sqlalchemy.engine.Connection,
+        inventory: pathlib.Path
     ) -> None:
         _internal_store.InternalStore.__init__(
             self, create_key=create_key, device_id=device_id
@@ -65,17 +67,22 @@ class MediaStore(_internal_store.InternalStore):
         self._session = session
         self._metadata = metadata
         Media.__table__.create(bind=connection, checkfirst=True)
+        self._data_inventory = inventory / pathlib.Path("data")
+        if not self._data_inventory.exists():
+            self._data_inventory.mkdir()
 
     def insert_media(
         self, file_path: pathlib.Path, media_type: MediaType, copy: bool = True
     ) -> None:
         """Insert a media."""
+        if not file_path.exists():
+            raise FileNotFoundError(f"{file_path} does not exist!")
+
         if copy:
-            # Copy the file to location
-            pass
+            # Use copy2 to preserve the file metadata.
+            shutil.copy2(src=file_path, dst=self._data_inventory)
         else:
-            # Move the file to location
-            pass
+            shutil.move(src=str(file_path), dst=self._data_inventory)
 
         stat = file_path.stat()
         data = Media(
@@ -86,7 +93,7 @@ class MediaStore(_internal_store.InternalStore):
             device_id=self._device_id,
             created_at=datetime.fromtimestamp(stat.st_ctime, tz=timezone.utc),
             size=stat.st_size,
-            duration=123,  # FIXME: get the duration info if it's an audio or a video.
+            duration=0,  # FIXME: get the duration info if it's an audio or a video.
         )
         self._session.add(data)
         self._session.commit()
