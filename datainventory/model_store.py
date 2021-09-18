@@ -17,7 +17,7 @@ class Model(common.Base):
 
     __tablename__ = "model"
 
-    name = sqlalchemy.Column(sqlalchemy.String)
+    name = sqlalchemy.Column(sqlalchemy.String, primary_key=True)
     version = sqlalchemy.Column(sqlalchemy.String)
 
 
@@ -25,7 +25,10 @@ class ModelStore(_internal_store.InternalStore):
     """Model Store."""
 
     def __init__(self, create_key, device_id: str, session: Session) -> None:
-        _internal_store.InternalStore.__init__(self, create_key, device_id)
+        _internal_store.InternalStore.__init__(
+            self, create_key=create_key, device_id=device_id
+        )
+        self._session = session
 
     def get_model(self, name: str, version: str) -> Tuple:
         """Retrieve the model according to the name and version from database."""
