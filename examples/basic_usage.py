@@ -1,7 +1,7 @@
 """An example shows how to use Data Inventory."""
 import pathlib
 
-from datetime import date
+from datetime import datetime
 from datetime import timedelta
 
 from datainventory import common
@@ -26,9 +26,8 @@ data = [{"scale": "F", "value": 97.9}, {"scale": "C", "value": 23.7}]
 store.insert(table_name=TABLE, values=data)
 
 # Query the data
-range = common.Range(date.today(), interval=timedelta(days=1))
+range = common.Range(datetime.today(), interval=timedelta(days=1))
 output = store.query_data(TABLE, range=range)
-print(output)
 
 # Use export() method to dump the inventory
 my_inventory.export(dest_filename=pathlib.Path("archive"))
