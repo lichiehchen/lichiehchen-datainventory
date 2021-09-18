@@ -5,6 +5,7 @@
 import pathlib
 import shutil
 import sqlalchemy
+import tarfile
 
 from sqlalchemy.orm import sessionmaker
 
@@ -14,7 +15,7 @@ from datainventory import media_store
 from datainventory import table_store
 
 
-class DataInventory:
+class Inventory:
     """Data Inventory."""
 
     def __init__(self, device_id: str, inventory: pathlib.Path) -> None:
@@ -25,7 +26,7 @@ class DataInventory:
 
         if not self._inventory.exists():
             self._inventory.mkdir()
-        self._engine = sqlalchemy.create_engine(f"sqlite:///{self._inventory}")
+        self._engine = sqlalchemy.create_engine(f"sqlite:///{self._database}")
         self._metadata = sqlalchemy.MetaData(bind=self._engine)
 
     def get_media_store(self) -> media_store.MediaStore:
@@ -59,9 +60,11 @@ class DataInventory:
             session=Session(),
         )
 
-    def export(self, dest: pathlib.Path) -> None:
+    def export(self, dest_filename: pathlib.Path) -> None:
         """Export the entire data inventory."""
-        raise NotImplementedError("Export is not implemented")
+        # TODO: Export tables as CSV.
+        with tarfile.open(name=f"{dest_filename.name}.tar.gz", mode="w:gz") as tarball:
+            tarball.add(name=self._inventory, arcname=dest_filename)
 
     def destroy(self) -> None:
         """Destory the entire data inventory."""
