@@ -8,7 +8,7 @@ def test_simple_case(tmp_path):
     """Test the basic functionalities of inventory."""
     inventorydir = tmp_path / pathlib.Path("inventorydir")
     my_inventory = inventory.Inventory(device_id="device_id", inventory=inventorydir)
-    assert my_inventory.get_model_store() is not None
+    assert my_inventory.get_media_store() is not None
     assert my_inventory.get_model_store() is not None
     assert my_inventory.get_table_store() is not None
 

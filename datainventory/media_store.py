@@ -59,7 +59,7 @@ class MediaStore(_internal_store.InternalStore):
         metadata: sqlalchemy.MetaData,
         session: Session,
         connection: sqlalchemy.engine.Connection,
-        inventory: pathlib.Path,
+        data_inventory: pathlib.Path,
     ) -> None:
         _internal_store.InternalStore.__init__(
             self, create_key=create_key, device_id=device_id
@@ -67,7 +67,7 @@ class MediaStore(_internal_store.InternalStore):
         self._session = session
         self._metadata = metadata
         Media.__table__.create(bind=connection, checkfirst=True)
-        self._data_inventory = inventory / pathlib.Path("data")
+        self._data_inventory = data_inventory
         if not self._data_inventory.exists():
             self._data_inventory.mkdir(parents=True)
 

@@ -21,6 +21,7 @@ class Inventory:
     def __init__(self, device_id: str, inventory: pathlib.Path) -> None:
         self._device_id = device_id
         self._inventory = inventory
+        self._data_inventory = self._inventory / pathlib.Path("data")
         self._database_name = f"{self._inventory.name}.db"
         self._database = self._inventory / self._database_name
 
@@ -38,7 +39,7 @@ class Inventory:
             metadata=self._metadata,
             session=Session(),
             connection=self._engine.connect(),
-            inventory=self._inventory,
+            data_inventory=self._data_inventory,
         )
 
     def get_model_store(self) -> model_store.ModelStore:
@@ -65,7 +66,8 @@ class Inventory:
         # TODO: Export tables as CSV.
         archive_path = f"{dest_filename.name}.tar.gz"
         with tarfile.open(name=archive_path, mode="w:gz") as tarball:
-            tarball.add(name=self._inventory, arcname=dest_filename)
+            tarball.add(name=self._data_inventory, arcname=dest_filename)
+            tarball.add(name=self._database)
         return pathlib.Path(archive_path)
 
     def destroy(self) -> None:

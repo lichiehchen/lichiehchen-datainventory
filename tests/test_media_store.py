@@ -13,6 +13,7 @@ from sqlalchemy.orm import sessionmaker
 def test_simple_case(tmp_path):
     """Test the basic functionalities of media_store."""
     testinventory = tmp_path / pathlib.Path("testinventory")
+    datainventory = testinventory / pathlib.Path("data")
     engine = sqlalchemy.create_engine("sqlite:///:memory:", echo=True, future=True)
     metadata = sqlalchemy.MetaData(bind=engine)
     Session = sessionmaker(bind=engine)
@@ -22,7 +23,7 @@ def test_simple_case(tmp_path):
         metadata=metadata,
         session=Session(),
         connection=engine.connect(),
-        inventory=testinventory,
+        data_inventory=datainventory,
     )
 
     with pytest.raises(FileNotFoundError):
