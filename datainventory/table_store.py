@@ -56,6 +56,7 @@ class TableStore(_internal_store.InternalStore):
 
         table = self._metadata.tables[table_name]
         self._session.execute(table.insert().values(values))
+        self._session.commit()
 
     def query_data(  # type: ignore
         self, table_name: str, range: Optional[common.Range] = None
