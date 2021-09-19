@@ -69,7 +69,7 @@ class MediaStore(_internal_store.InternalStore):
         Media.__table__.create(bind=connection, checkfirst=True)
         self._data_inventory = inventory / pathlib.Path("data")
         if not self._data_inventory.exists():
-            self._data_inventory.mkdir()
+            self._data_inventory.mkdir(parents=True)
 
     def insert_media(
         self, file_path: pathlib.Path, media_type: MediaType, copy: bool = True
@@ -98,7 +98,9 @@ class MediaStore(_internal_store.InternalStore):
         self._session.add(data)
         self._session.commit()
 
-    def query_data(self, query_statement: Optional[sqlalchemy.sql.Select]) -> List:
+    def query_data(
+        self, query_statement: Optional[sqlalchemy.sql.Select] = None
+    ) -> List:
         """Retrieve the media data."""
         if query_statement:
             result = self._session.execute(query_statement)

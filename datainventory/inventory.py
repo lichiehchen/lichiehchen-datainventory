@@ -60,11 +60,13 @@ class Inventory:
             session=Session(),
         )
 
-    def export(self, dest_filename: pathlib.Path) -> None:
+    def export(self, dest_filename: pathlib.Path) -> pathlib.Path:
         """Export the entire data inventory."""
         # TODO: Export tables as CSV.
-        with tarfile.open(name=f"{dest_filename.name}.tar.gz", mode="w:gz") as tarball:
+        archive_path = f"{dest_filename.name}.tar.gz"
+        with tarfile.open(name=archive_path, mode="w:gz") as tarball:
             tarball.add(name=self._inventory, arcname=dest_filename)
+        return pathlib.Path(archive_path)
 
     def destroy(self) -> None:
         """Destory the entire data inventory."""
