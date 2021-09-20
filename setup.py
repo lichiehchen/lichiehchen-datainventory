@@ -12,7 +12,7 @@ README = (HERE / "README.rst").read_text()
 # This call to setup() does all the work
 setuptools.setup(
     name="datainventory",
-    version="0.0.1",
+    version="0.0.2",
     description="Data Inventory",
     long_description=README,
     long_description_content_type="text/x-rst",
@@ -20,7 +20,7 @@ setuptools.setup(
     author="IoT Spectator",
     license="MIT",
     classifiers=[
-        "Development Status :: 2 - Pre-Alpha",
+        "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "License :: OSI Approved :: MIT License",
