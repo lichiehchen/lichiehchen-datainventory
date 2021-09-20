@@ -7,6 +7,8 @@ import shutil
 import sqlalchemy
 import tarfile
 
+import pandas as pd
+
 from sqlalchemy.orm import sessionmaker
 
 from datainventory import _internal_store
@@ -21,6 +23,7 @@ class Inventory:
     def __init__(self, device_id: str, inventory: pathlib.Path) -> None:
         self._device_id = device_id
         self._inventory = inventory
+        self._data_inventory = self._inventory / pathlib.Path("data")
         self._database_name = f"{self._inventory.name}.db"
         self._database = self._inventory / self._database_name
 
@@ -35,10 +38,9 @@ class Inventory:
         return media_store.MediaStore(
             create_key=_internal_store.CREATE_KEY,
             device_id=self._device_id,
-            metadata=self._metadata,
             session=Session(),
             connection=self._engine.connect(),
-            inventory=self._inventory,
+            data_inventory=self._data_inventory,
         )
 
     def get_model_store(self) -> model_store.ModelStore:
@@ -60,11 +62,26 @@ class Inventory:
             session=Session(),
         )
 
-    def export(self, dest_filename: pathlib.Path) -> None:
+    def export(self, dest_filename: pathlib.Path) -> pathlib.Path:
         """Export the entire data inventory."""
-        # TODO: Export tables as CSV.
-        with tarfile.open(name=f"{dest_filename.name}.tar.gz", mode="w:gz") as tarball:
-            tarball.add(name=self._inventory, arcname=dest_filename)
+        self._metadata.reflect(self._engine)
+        session = sessionmaker(bind=self._engine)()
+        tables = list()
+        for table_name in self._metadata.tables:
+            table = self._metadata.tables[table_name]
+            table_csv = self._inventory / pathlib.Path(f"{table}.csv")
+            pd.DataFrame(
+                session.query(table).all(), columns=table.columns.keys()
+            ).to_csv(path_or_buf=table_csv, index=False)
+            tables.append(table_csv)
+
+        archive_path = f"{dest_filename.name}.tar.gz"
+        with tarfile.open(name=archive_path, mode="w:gz") as tarball:
+            tarball.add(name=self._data_inventory)
+            for table_csv_file in tables:
+                tarball.add(name=table_csv_file)
+                table_csv_file.unlink()
+        return pathlib.Path(archive_path)
 
     def destroy(self) -> None:
         """Destory the entire data inventory."""

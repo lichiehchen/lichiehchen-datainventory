@@ -16,7 +16,6 @@ def test_simple_case():
     """Test the basic functionalities of table_store."""
     engine = sqlalchemy.create_engine("sqlite:///:memory:", echo=True, future=True)
     metadata = sqlalchemy.MetaData(bind=engine)
-
     Session = sessionmaker(bind=engine)
     store = table_store.TableStore(
         create_key=_internal_store.CREATE_KEY,
