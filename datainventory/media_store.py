@@ -56,7 +56,6 @@ class MediaStore(_internal_store.InternalStore):
         self,
         create_key,
         device_id: str,
-        metadata: sqlalchemy.MetaData,
         session: Session,
         connection: sqlalchemy.engine.Connection,
         data_inventory: pathlib.Path,
@@ -65,7 +64,6 @@ class MediaStore(_internal_store.InternalStore):
             self, create_key=create_key, device_id=device_id
         )
         self._session = session
-        self._metadata = metadata
         Media.__table__.create(bind=connection, checkfirst=True)
         self._data_inventory = data_inventory
         if not self._data_inventory.exists():
@@ -73,23 +71,24 @@ class MediaStore(_internal_store.InternalStore):
 
     def insert_media(
         self, file_path: pathlib.Path, media_type: MediaType, copy: bool = True
-    ) -> None:
+    ) -> pathlib.Path:
         """Insert a media."""
         if not file_path.exists():
             raise FileNotFoundError(f"{file_path} does not exist!")
 
-        if copy:
-            # Use copy2 to preserve the file metadata.
-            shutil.copy2(src=file_path, dst=self._data_inventory)
-        else:
-            shutil.move(src=str(file_path), dst=self._data_inventory)
+        # Use copy2 to preserve the file metadata.
+        shutil.copy2(src=file_path, dst=self._data_inventory)
+        if not copy:
+            # If not copy, perform move operation, i.e., copy and then delete
+            file_path.unlink()
 
-        stat = file_path.stat()
+        dest_file = self._data_inventory / pathlib.Path(file_path.name)
+        stat = dest_file.stat()
         data = Media(
-            filename=file_path.name,
-            fullpath=str(file_path),
+            filename=dest_file.name,
+            fullpath=str(dest_file),
             media_type=media_type.name,
-            format=file_path.suffix,
+            format=dest_file.suffix,
             device_id=self._device_id,
             created_at=datetime.fromtimestamp(stat.st_ctime, tz=timezone.utc),
             size=stat.st_size,
@@ -97,6 +96,7 @@ class MediaStore(_internal_store.InternalStore):
         )
         self._session.add(data)
         self._session.commit()
+        return dest_file
 
     def query_data(
         self, query_statement: Optional[sqlalchemy.sql.Select] = None

@@ -15,12 +15,10 @@ def test_simple_case(tmp_path):
     testinventory = tmp_path / pathlib.Path("testinventory")
     datainventory = testinventory / pathlib.Path("data")
     engine = sqlalchemy.create_engine("sqlite:///:memory:", echo=True, future=True)
-    metadata = sqlalchemy.MetaData(bind=engine)
     Session = sessionmaker(bind=engine)
     store = media_store.MediaStore(
         create_key=_internal_store.CREATE_KEY,
         device_id="test_device",
-        metadata=metadata,
         session=Session(),
         connection=engine.connect(),
         data_inventory=datainventory,
@@ -35,12 +33,14 @@ def test_simple_case(tmp_path):
     test_binary: pathlib.Path = testinventory / test_binary_name
     test_binary.write_bytes(b"Binary file contents")
 
-    store.insert_media(file_path=test_binary, media_type=media_store.MediaType.Video)
+    dest = store.insert_media(
+        file_path=test_binary, media_type=media_store.MediaType.Video
+    )
     query_result = store.query_data()
     assert len(query_result) == 1
 
     assert query_result[0][0].filename == test_binary_name.name
-    assert query_result[0][0].fullpath == str(test_binary.absolute())
+    assert query_result[0][0].fullpath == str(dest.absolute())
     assert query_result[0][0].media_type == media_store.MediaType.Video.name
     assert query_result[0][0].format == test_binary_name.suffix
     assert query_result[0][0].device_id == "test_device"
