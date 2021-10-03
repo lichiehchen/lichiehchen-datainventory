@@ -12,7 +12,7 @@ README = (HERE / "README.rst").read_text()
 # This call to setup() does all the work
 setuptools.setup(
     name="datainventory",
-    version="0.0.2",
+    version="0.0.3",
     description="Data Inventory",
     long_description=README,
     long_description_content_type="text/x-rst",
@@ -28,5 +28,6 @@ setuptools.setup(
     ],
     keywords="image and video database",
     packages=setuptools.find_packages(exclude=["diagram", "examples", "tests"]),
+    install_requires=["pandas", "SQLAlchemy"],
     python_requires=">=3.7",
 )
